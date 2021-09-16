@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Time  : 2021/9/15 11:46
+# @Time  : 2021/9/16 14:22
 # @Author: Aaron Meng
-# @File  : swapPairs.py
+# @File  : reverseBetween.py
 from typing import List
 
 
@@ -59,20 +59,29 @@ class LinkList(object):
 
 class Solution:
     @staticmethod
-    def swapPairs(head: ListNode) -> ListNode:
-        if head == None or head.next == None:
+    def reverseBetween(head: ListNode, left: int, right: int) -> ListNode:
+        if left == right:
             return head
-        p, q = head, head.next
-        head = q
-        temp = q.next
-        q.next = p
-        p.next = Solution.swapPairs(temp)
-        return head
+        dummyHead = ListNode(0)
+        dummyHead.next = head
+        prev, p = dummyHead, dummyHead.next
+        for _ in range(left - 1):
+            prev, p = prev.next, p.next
+        q, end = p.next, p  # end of the sub-list
+        for _ in range(left, right):
+            end.next = q.next
+            q.next = p
+            prev.next = q
+            p = prev.next
+            q = end.next
+        return dummyHead.next
 
 
 if __name__ == '__main__':
-    head = [1, 2, 3, 4]
+    head = [1, 2]
     head = LinkList.initList(head)
     LinkList.traveList(head)
-    head = Solution.swapPairs(head)
+    left = 1
+    right = 2
+    head = Solution.reverseBetween(head, left, right)
     LinkList.traveList(head)
