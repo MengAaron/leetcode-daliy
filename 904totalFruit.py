@@ -36,7 +36,27 @@ class Solution:
             start = endJ + 1 if endJ < endK else endK + 1
         return ans
 
+    @staticmethod
+    def totalFruit2(fruits: List[int]) -> int:
+        n = len(fruits)
+        m = {}
+        ans = j = cnt = 0
+        for i in range(n):
+            if fruits[i] not in m:
+                cnt += 1
+            m[fruits[i]] = i
+            while j < n and cnt > 2:
+                if m[fruits[j]] == j:
+                    m.pop(fruits[j])
+                    cnt -= 1
+                j += 1
+            if cnt <= 2:
+                ans = max(i - j + 1, ans)
+        return ans
+
+
+
 
 if __name__ == '__main__':
-    fruits = [3,3,3,1,2,1,1,2,3,3,4]
+    fruits = [3, 3, 3, 1, 2, 1, 1, 2, 3, 3, 4]
     print(Solution.totalFruit(fruits))
